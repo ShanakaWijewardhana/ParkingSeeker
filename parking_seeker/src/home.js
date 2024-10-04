@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -12,6 +13,7 @@ import directionIcon from './icons/direction.png';
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2hhbmFrYTA1MzAiLCJhIjoiY20xdWExbDVkMGJ1YTJsc2J6bjFmaTVkNyJ9.H4sWjz4eIt0e6jeScvR5-g'; // Replace with your actual Mapbox access token
 
 const HomePage = () => {
+  const navigate = useNavigate(); // Initialize the useNavigate hook
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null); // Ref to store the map instance
   const [directionMarker, setDirectionMarker] = useState(null); // State to hold the direction marker
@@ -170,7 +172,9 @@ const showCurrentLocation = () => {
         <div className="sidebar-icon">
           <img src={userIcon} alt="User Icon" className="user-icon" />
           <img src={homeIcon} alt="Home Icon" />
-          <button className="login-button">Login</button>
+          <button className="login-button" onClick={() => navigate('/login')}>
+            Login
+          </button>
         </div>
       </div>
 

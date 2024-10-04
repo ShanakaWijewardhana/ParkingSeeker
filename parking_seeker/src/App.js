@@ -1,15 +1,17 @@
 import React from 'react';
-import Home from './home'; // Import your HomePage component with an uppercase H
-import './App.css'; // Global CSS (if needed)
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './home'; // Assuming your homepage is in HomePage.js
+import LoginPage from './login'; // You can create a new component for login or link to your HTML
 
-// Main App function
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      {/* Render the Home component */}
-      <Home />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;

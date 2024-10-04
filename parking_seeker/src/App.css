@@ -102,10 +102,10 @@
   cursor: pointer; /* Change cursor on hover */
   outline: none; /* Remove outline */
   position: absolute; /* Absolute positioning */
-  bottom: 20px; /* Space from the bottom */
-  right: 20px; /* Space from the right */
+  bottom: 10px; /* Space from the bottom */
+  right: 10px; /* Space from the right */
   z-index: 1; /* Ensure it is above the map */
-  margin-bottom: 120px;
+  margin-bottom: 150px;
   margin-right: 5px;
 }
 
