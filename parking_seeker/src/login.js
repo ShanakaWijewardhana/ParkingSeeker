@@ -14,11 +14,11 @@ const LoginPage = () => {
         </div>
         <div className="button-group">
           <button type="submit" className="user-login">User Login</button>
-          <button type="submit" className="keeper-login">Keeper Login</button>
+          <button type="submit" className="keeper-login" onClick={() => window.location.href = 'keepers'}>Keeper Login</button>
         </div>
         <div className="signup">
           <p>If you don’t have an account</p>
-          <button type="button" className="signup-btn" onClick={() => window.location.href = 'signup.html'}>Sign Up</button>
+          <button type="button" className="signup-btn" onClick={() => window.location.href = 'signup'}>Sign Up</button>
         </div>
       </form>
     </div>

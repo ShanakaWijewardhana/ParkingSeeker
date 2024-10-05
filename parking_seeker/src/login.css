@@ -18,11 +18,12 @@ body {
 h2 {
     margin-bottom: 20px;
     font-size: 24px;
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 .input-group {
     margin-bottom: 15px;
+    margin-right: 20px;
 }
 
 input[type="text"], input[type="password"] {
@@ -56,6 +57,7 @@ button:hover {
 .signup {
     margin-top: 20px;
     color: red;
+    font-weight: bold;
 }
 
 .signup p {

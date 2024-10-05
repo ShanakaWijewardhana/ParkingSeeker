@@ -4,13 +4,13 @@ import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import './App.css';
+import './App.css'; //home.js files styles are done inside the main css file(App.css)
 import homeIcon from './icons/home.png';
 import userIcon from './icons/user.png';
 import myLocationIcon from './icons/my_location.png';
 import directionIcon from './icons/direction.png';
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoic2hhbmFrYTA1MzAiLCJhIjoiY20xdWExbDVkMGJ1YTJsc2J6bjFmaTVkNyJ9.H4sWjz4eIt0e6jeScvR5-g'; // Replace with your actual Mapbox access token
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2hhbmFrYTA1MzAiLCJhIjoiY20xdWExbDVkMGJ1YTJsc2J6bjFmaTVkNyJ9.H4sWjz4eIt0e6jeScvR5-g'; 
 
 const HomePage = () => {
   const navigate = useNavigate(); // Initialize the useNavigate hook
