@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './keepers.css'; // Create and style your keepers page CSS here
+import './keepers.css'; // Ensure you create and style the CSS file
 
 const KeepersPage = () => {
   // State to hold vehicle counts
@@ -17,7 +17,11 @@ const KeepersPage = () => {
   const handleDetails = (type) => {
     // Handle showing details based on type (parked, booked)
     console.log(`Showing details for ${type}`);
-    // You can redirect to a detailed page or show a modal here
+    if (type === 'parked') {
+      window.location.href = '/parkingDetails'; // Redirect to parking details page
+    } else if (type === 'booked') {
+      window.location.href = '/bookingDetails'; // Redirect to booking details page
+    }
   };
 
   return (
@@ -69,7 +73,7 @@ const KeepersPage = () => {
               <p>Bikes</p>
               <input type="number" value={vehicleData.remain.bikes} readOnly />
             </div>
-            {/* Notice there's no details button in the "Remain" section */}
+            {/* No details button in the "Remain" section as per your requirement */}
           </div>
         </div>
       </div>
