@@ -36,7 +36,7 @@ const ParkingDetails = () => {
 
   const viewBookingDetails = () => {
     // Logic to view booking details page
-    window.location.href = '/booking-details'; // Or use React Router navigation
+    window.location.href = '/bookingDetails'; // Or use React Router navigation
   };
 
   return (
@@ -53,10 +53,9 @@ const ParkingDetails = () => {
             <th>User name</th>
             <th>Vehicle Type</th>
             <th>Start Time</th>
-            <th>Stop Time</th>
+            <th>Stop Timer</th>
             <th>Parked Time</th>
             <th>Price</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -65,12 +64,11 @@ const ParkingDetails = () => {
               <td>{detail.username}</td>
               <td>{detail.vehicleType}</td>
               <td>{detail.startTime}</td>
-              <td>{detail.stopTime}</td>
-              <td>{detail.parkedTime}</td>
-              <td>{detail.price}</td>
               <td>
                 <button className="stop-button" onClick={() => handleStop(index)}>Stop</button>
               </td>
+              <td>{detail.parkedTime}</td>
+              <td>{detail.price}</td>
             </tr>
           ))}
         </tbody>
