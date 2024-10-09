@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth'); // Import the auth routes
 const authMiddleware = require('./middleware/authMiddleware'); // Import the auth middleware
+const parkingRoutes = require('./routes/parking');
+const bodyParser = require('body-parser');
 
 const app = express();
 dotenv.config();
@@ -13,6 +15,9 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes); // Add authentication routes
+
+// Parking space routes
+app.use('/api/parking', parkingRoutes);
 
 // Example of protected route (using authMiddleware)
 app.get('/api/protected', authMiddleware, (req, res) => {
