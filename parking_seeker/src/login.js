@@ -17,7 +17,7 @@ const LoginPage = () => {
       <h2>Login</h2>
       <form id="loginForm" action="login-process.php" method="POST">
         <div className="input-group">
-          <input type="text" id="username" name="username" placeholder="User name" required />
+          <input type="email" id="email" name="email" placeholder="Email" required />
         </div>
         <div className="input-group">
           <input type="password" id="password" name="password" placeholder="Password" required />
