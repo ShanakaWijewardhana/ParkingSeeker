@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const parkingSpaceSchema = new mongoose.Schema({
   location: {
-    type: { type: String, default: 'Point' }, // GeoJSON format for coordinates
+    type: { type: String, default: 'Point' },
     coordinates: {
       type: [Number],
       required: true,
@@ -20,6 +20,14 @@ const parkingSpaceSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true,
+  },
+  carSpaces: {
+    total: { type: Number, required: true }, // Total car spaces available
+    remaining: { type: Number, required: true }, // Car spaces remaining
+  },
+  bikeSpaces: {
+    total: { type: Number, required: true }, // Total bike spaces available
+    remaining: { type: Number, required: true }, // Bike spaces remaining
   },
 });
 

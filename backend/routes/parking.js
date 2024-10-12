@@ -56,4 +56,46 @@ router.put('/:id/availability', async (req, res) => {
   }
 });
 
+// GET all parking locations
+router.get('/', async (req, res) => {
+  try {
+    const parkingSpaces = await ParkingSpace.find();
+    res.json(parkingSpaces);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// POST route to book a parking space
+router.post('/book', async (req, res) => {
+  const { parkingSpaceId, type } = req.body; // type: 'car' or 'bike'
+
+  try {
+    const parkingSpace = await ParkingSpace.findById(parkingSpaceId);
+
+    if (!parkingSpace) {
+      return res.status(404).json({ message: 'Parking space not found' });
+    }
+
+    if (type === 'car') {
+      if (parkingSpace.carSpaces.remaining > 0) {
+        parkingSpace.carSpaces.remaining -= 1;
+      } else {
+        return res.status(400).json({ message: 'No available car spaces' });
+      }
+    } else if (type === 'bike') {
+      if (parkingSpace.bikeSpaces.remaining > 0) {
+        parkingSpace.bikeSpaces.remaining -= 1;
+      } else {
+        return res.status(400).json({ message: 'No available bike spaces' });
+      }
+    }
+
+    await parkingSpace.save();
+    res.json({ message: 'Booking successful' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;
