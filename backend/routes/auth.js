@@ -63,7 +63,7 @@ router.post('/klogin', async (req, res) => {
     if (!keeper) return res.status(400).json({ message: 'Invalid credentials' });
     
     // Compare the password
-    const isMatch = await bcrypt.compare(password, keeper.password);
+    const isMatch = await bcrypt.compare(password, keepers.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
     
     // Generate a JWT token
