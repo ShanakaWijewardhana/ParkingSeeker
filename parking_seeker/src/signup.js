@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios for HTTP requests
 import './signup.css'; 
 
 const SignupPage = () => {
@@ -12,6 +13,9 @@ const SignupPage = () => {
     address: ''     
   });
 
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -20,19 +24,47 @@ const SignupPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match!');
+      setErrorMessage('Passwords do not match!');
       return;
     }
 
-    console.log('Form submitted:', formData);
+    try {
+      // Make POST request to signup route
+      const response = await axios.post('http://localhost:5000/api/auth/signup', {
+        username: formData.username,
+        email: formData.email,
+        nic: formData.nic,
+        tpno: formData.tpno,
+        address: formData.address,
+        password: formData.password
+      });
+
+      if (response.status === 200) {
+        setSuccessMessage('Signup successful! Please login.');
+        setErrorMessage('');
+        // Optionally, redirect to login page after a short delay
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 2000);
+      }
+    } catch (error) {
+      // Handle errors from the backend
+      if (error.response && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('An error occurred during signup. Please try again.');
+      }
+    }
   };
 
   return (
     <div className="signup-container">
       <h2>Sign Up</h2>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div className="input-group">
           <input

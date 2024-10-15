@@ -1,7 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Import the user model
+const User = require('../models/User'); 
+const keeper = require('../models/keeper'); 
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.post('/signup', async (req, res) => {
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'User already exists' });
-
+    
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -43,6 +44,30 @@ router.post('/login', async (req, res) => {
     
     // Generate a JWT token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    
+
+    res.status(200).json({ token });
+  } catch (error) {
+    console.error('Error generating JWT:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// keeper login route
+router.post('/klogin', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Check if the keeper exists
+    const keeper = await keeper.findOne({ email });
+    if (!keeper) return res.status(400).json({ message: 'Invalid credentials' });
+    
+    // Compare the password
+    const isMatch = await bcrypt.compare(password, keeper.password);
+    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+    
+    // Generate a JWT token
+    const token = jwt.sign({ keeperId: keeper._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
 
     res.status(200).json({ token });
