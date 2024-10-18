@@ -10,6 +10,9 @@ const bodyParser = require('body-parser');
 const app = express();
 dotenv.config();
 
+const cors = require('cors');
+app.use(cors());
+
 // Middleware to parse incoming JSON data
 app.use(express.json());
 
