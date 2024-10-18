@@ -42,7 +42,7 @@ const SignupPage = () => {
         password: formData.password
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         setSuccessMessage('Signup successful! Please login.');
         setErrorMessage('');
         // Optionally, redirect to login page after a short delay
