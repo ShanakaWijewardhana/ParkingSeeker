@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); 
 const keeper = require('../models/keeper'); 
+const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -77,6 +78,19 @@ router.post('/klogin', async (req, res) => {
     res.status(200).json({ token });
   } catch (error) {
     console.error('Error generating JWT:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Route to get user data
+router.get('/user', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('-password'); // Exclude password from the response
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
 });

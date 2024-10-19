@@ -27,6 +27,7 @@ const LoginPage = () => {
 
       // Redirect to the loginHome page
       window.location.href = '/loginHome';
+      
     } catch (error) {
       // Handle login error (e.g., invalid credentials)
       if (error.response && error.response.data.message) {
