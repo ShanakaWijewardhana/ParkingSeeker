@@ -14,20 +14,27 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent default form submission
-
+  
     try {
       // Make a POST request to your backend login route
       const response = await axios.post('http://localhost:5000/api/auth/login', {
         email,
         password,
       });
-
-      // On successful login, save the token in localStorage or sessionStorage
-      localStorage.setItem('token', response.data.token);
-
-      // Redirect to the loginHome page
-      window.location.href = '/loginHome';
+  
+      // Log the token to verify it's being received
+      console.log('Login response:', response.data); 
       
+      if (response.data.token) {
+        // On successful login, save the token in localStorage
+        localStorage.setItem('token', response.data.token);
+        
+        // Redirect to the loginHome page
+        window.location.href = '/loginHome';
+      } else {
+        setErrorMessage('Login failed: No token received.');
+      }
+  
     } catch (error) {
       // Handle login error (e.g., invalid credentials)
       if (error.response && error.response.data.message) {
