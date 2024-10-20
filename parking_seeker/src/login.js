@@ -8,34 +8,36 @@ const LoginPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleBack = () => {
-    // Redirect to the previous page (keepers page)
-    window.location.href = '/home';
+    window.location.href = '/home'; // Redirect to the previous page (keepers page)
   };
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent default form submission
   
     try {
+      console.log('Sending login request:', { email, password }); // Log what is being sent
+
       // Make a POST request to your backend login route
       const response = await axios.post('http://localhost:5000/api/auth/login', {
         email,
         password,
       });
   
-      // Log the token to verify it's being received
-      console.log('Login response:', response.data); 
+      console.log('Login response:', response.data); // Log the token to verify it's being received
       
       if (response.data.token) {
-        // On successful login, save the token in localStorage
-        localStorage.setItem('token', response.data.token);
+        console.log('Token received:', response.data.token); // Log the token to verify
+
+        localStorage.setItem('token', response.data.token); // On successful login, save the token in localStorage
         
-        // Redirect to the loginHome page
-        window.location.href = '/loginHome';
+        window.location.href = '/loginHome'; // Redirect to the loginHome page
       } else {
         setErrorMessage('Login failed: No token received.');
       }
   
     } catch (error) {
+      console.log('Login error:', error); // Log any error
+
       // Handle login error (e.g., invalid credentials)
       if (error.response && error.response.data.message) {
         setErrorMessage(error.response.data.message);
