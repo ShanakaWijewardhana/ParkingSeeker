@@ -6,7 +6,7 @@ const KeepersPage = () => {
   const [vehicleData, setVehicleData] = useState({
     parked: { cars: 0, bikes: 0 },
     booked: { cars: 0, bikes: 0 },
-    remain: { cars: 0, bikes: 0 },
+    remain: { cars: 3, bikes: 2 },
   });
 
   const handleLogout = () => {

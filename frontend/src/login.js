@@ -49,6 +49,38 @@ const LoginPage = () => {
     console.log('Login form submitted'); // To check if form is submitting
     console.log('Email:', email, 'Password:', password); // To check if email and password are populated
   };
+  
+  //Handle Keepers login
+  const handleKeeperLogin = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+    
+    try {
+      // Make a POST request to the keeper login route
+      const response = await axios.post('http://localhost:5000/api/auth/klogin', {
+        email,
+        password,
+      });
+  
+      console.log('Keeper login response:', response.data);
+      
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token); // Save the keeper token in localStorage
+        
+        window.location.href = '/keepers'; // Redirect to keepers page
+      } else {
+        setErrorMessage('Keeper login failed: No token received.');
+      }
+    
+    } catch (error) {
+      console.log('Keeper login error:', error);
+      
+      if (error.response && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('An error occurred. Please try again.');
+      }
+    }
+  };
 
   return (
     <div className="login-container">
@@ -84,7 +116,7 @@ const LoginPage = () => {
         </div>
         <div className="button-group">
           <button type="submit" className="user-login">User Login</button>
-          <button type="button" className="keeper-login" onClick={() => window.location.href = 'keepers'}>Keeper Login</button>
+          <button type="button" className="keeper-login" onClick={handleKeeperLogin}>Keeper Login</button>
         </div>
         <div className="signup">
           <p>If you don’t have an account</p>

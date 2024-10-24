@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); 
-const keeper = require('../models/keeper'); 
+const Keeper = require('../models/keeper'); 
 const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -76,17 +76,16 @@ router.post('/klogin', async (req, res) => {
 
   try {
     // Check if the keeper exists
-    const keeper = await keeper.findOne({ email });
+    const keeper = await Keeper.findOne({ email });
     if (!keeper) return res.status(400).json({ message: 'Invalid credentials' });
     
     // Compare the password
-    const isMatch = await bcrypt.compare(password, keepers.password);
+    const isMatch = await bcrypt.compare(password, keeper.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
     
     // Generate a JWT token
     const token = jwt.sign({ keeperId: keeper._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
-
     res.status(200).json({ token });
   } catch (error) {
     console.error('Error generating JWT:', error);
@@ -97,7 +96,7 @@ router.post('/klogin', async (req, res) => {
 // Route to get user data
 router.get('/user', authMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select('-password'); // Exclude password from the response
+    const user = await User.findById(req.user).select('-password'); // Exclude password from the response
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
