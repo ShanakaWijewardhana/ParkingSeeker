@@ -98,4 +98,19 @@ router.post('/book', async (req, res) => {
   }
 });
 
+// Get parking availability for map markers
+router.get('/parking-availability', (req, res) => {
+  const parkingAvailability = {
+      "Car": [
+          { "coordinates": [81.213795, 8.6546], "available": true },
+          { "coordinates": [81.213795, 8.6546], "available": false }
+      ],
+      "Motorcycle": [
+          { "coordinates": [81.213795, 8.6546], "available": false },
+          { "coordinates": [81.213795, 8.6546], "available": true }
+      ]
+  };
+  res.json(parkingAvailability);
+});
+
 module.exports = router;

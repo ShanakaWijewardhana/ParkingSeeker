@@ -18,6 +18,19 @@ const HomePage = () => {
   const mapRef = useRef(null); // Ref to store the map instance
   const [directionMarker, setDirectionMarker] = useState(null); // State to hold the direction marker
   const [startLocation, setStartLocation] = useState(null); // State to hold the user's starting location
+  const [vehicleType, setVehicleType] = useState("Car"); // Track selected vehicle type
+  const [parkingAvailability, setParkingAvailability] = useState(null);
+  const [markers, setMarkers] = useState([]); // To track and clear markers dynamically
+
+  const fetchParkingAvailability = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/parking/parking-availability'); // Make sure this endpoint matches your backend route
+      const data = await response.json();
+      setParkingAvailability(data);
+    } catch (error) {
+      console.error('Error fetching parking availability:', error);
+    }
+  };
 
   useEffect(() => {
     // Initialize the map, but don't center it yet
@@ -29,6 +42,9 @@ const HomePage = () => {
     });
 
     mapRef.current = map;
+
+    // Fetch parking availability data when the component loads
+    fetchParkingAvailability();
 
     // Add navigation controls
     const navControl = new mapboxgl.NavigationControl();
@@ -71,9 +87,59 @@ const HomePage = () => {
       setDirectionMarker(newDirectionMarker);
     });
 
+    map.on('load', () => {
+      map.addSource('parkingArea', {
+        type: 'geojson',
+        data: parkingArea,
+      });
+    
+      map.addLayer({
+        id: 'parkingAreaLayer',
+        type: 'fill',
+        source: 'parkingArea',
+        layout: {},
+        paint: {
+          'fill-color': '#088',  // Customize the color
+          'fill-opacity': 0.5,
+        },
+      });
+    
+      map.addLayer({
+        id: 'parkingAreaBorder',
+        type: 'line',
+        source: 'parkingArea',
+        layout: {},
+        paint: {
+          'line-color': '#088',
+          'line-width': 2,
+        },
+      });
+    });
+    
+
     // Clean up the map on unmount
     return () => map.remove();
   }, [directionMarker]);
+
+  // Update markers when the vehicle type changes
+  useEffect(() => {
+    if (!mapRef.current || !parkingAvailability) return;
+    
+    // Add new markers based on availability data for the selected vehicle type
+    const newMarkers = parkingAvailability[vehicleType].map((spot) => {
+      return new mapboxgl.Marker({
+        color: spot.available ? 'green' : 'red',
+      })
+      .setLngLat(spot.coordinates)
+      .addTo(mapRef.current);
+    });
+
+    setMarkers(newMarkers);
+  }, [vehicleType, parkingAvailability]); // Runs whenever `vehicleType` or `parkingAvailability` changes
+
+  const handleVehicleTypeChange = (event) => {
+    setVehicleType(event.target.value);
+  };
 
   // Function to create the direction icon element
   const createDirectionIcon = () => {
@@ -164,8 +230,26 @@ const showCurrentLocation = () => {
       }
     );
   };
-  
 
+  const parkingArea = {
+    type: 'Feature',
+    geometry: {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [81.213771, 8.6546437], // Point 1
+          [81.213835, 8.654599], // Point 2
+          [81.213805, 8.654555], // Point 3
+          [81.21374, 8.65460], // Point 4
+          [81.213771, 8.6546437]  // Closing the polygon (same as Point 1)
+        ]
+      ]
+    },
+    properties: {
+      name: 'Parking Area'
+    }
+  };
+  
   return (
     <div className="homepage">
       <div className="sidebar">
@@ -183,8 +267,7 @@ const showCurrentLocation = () => {
 
         <div className="top-bar">
           <div className="vehicle-type-container">
-            <select className="vehicle-type">
-              <option>Vehicle Type</option>
+            <select className="vehicle-type" value={vehicleType} onChange={handleVehicleTypeChange}>
               <option>Car</option>
               <option>Motorcycle</option>
             </select>

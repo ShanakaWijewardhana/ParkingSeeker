@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth'); // Import the auth routes
 const authMiddleware = require('./middleware/authMiddleware'); // Import the auth middleware
 const parkingRoutes = require('./routes/parking');
 const bodyParser = require('body-parser');
+const keepersRoutes = require('./routes/keepers');
 
 const app = express();
 dotenv.config();
@@ -30,6 +31,9 @@ app.use('/api/parking', parkingRoutes);
 app.get('/api/protected', authMiddleware, (req, res) => {
   res.json({ message: `This is protected, userId: ${req.user}` });
 });
+
+//keepers data routes
+app.use('/api/keepers', keepersRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
