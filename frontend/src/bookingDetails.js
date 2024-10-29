@@ -22,7 +22,6 @@ const BookingDetails = () => {
   // Sample data for bookings
   const bookingData = [
     { id: 1, userName: 'John Doe', vehicleType: 'Car', bookedTime: '2 hours' },
-    { id: 2, userName: 'Jane Smith', vehicleType: 'Bike', bookedTime: '1 hour' },
   ];
 
   return (

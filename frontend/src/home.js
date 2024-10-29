@@ -124,15 +124,22 @@ const HomePage = () => {
   // Update markers when the vehicle type changes
   useEffect(() => {
     if (!mapRef.current || !parkingAvailability) return;
-    
+
+    // Clear old markers
+    markers.forEach(marker => marker.remove());
+
     // Add new markers based on availability data for the selected vehicle type
     const newMarkers = parkingAvailability[vehicleType].map((spot) => {
+      const isAvailable = spot.remainingSpaces > 0; // Green if available, red if not
+
       return new mapboxgl.Marker({
-        color: spot.available ? 'green' : 'red',
+        color: isAvailable ? 'red' : 'green',
       })
       .setLngLat(spot.coordinates)
       .addTo(mapRef.current);
     });
+
+    console.log("Parking Availability:", parkingAvailability);
 
     setMarkers(newMarkers);
   }, [vehicleType, parkingAvailability]); // Runs whenever `vehicleType` or `parkingAvailability` changes

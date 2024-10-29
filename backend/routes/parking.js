@@ -98,19 +98,48 @@ router.post('/book', async (req, res) => {
   }
 });
 
-// Get parking availability for map markers
+// In-memory storage for real-time availability status
+let currentAvailability = {
+  Car: [
+    { coordinates: [81.213795, 8.6546], available: true },
+    { coordinates: [81.213795, 8.6546], available: true }
+  ],
+  Motorcycle: [
+    { coordinates: [81.213795, 8.6546], available: true },
+    { coordinates: [81.213795, 8.6546], available: true }
+  ]
+};
+
+// POST route to check remaining spaces for availability and update in-memory data
+router.post('/check-availability', async (req, res) => {
+  const { remain } = req.body;
+
+  try {
+    // Update availability status based on remain values
+    currentAvailability.Car = currentAvailability.Car.map(location => ({
+      ...location,
+      available: remain.cars > 0
+    }));
+
+    currentAvailability.Motorcycle = currentAvailability.Motorcycle.map(location => ({
+      ...location,
+      available: remain.bikes > 0
+    }));
+
+    const availabilityStatus = {
+      carsAvailable: remain.cars > 0,
+      bikesAvailable: remain.bikes > 0
+    };
+
+    res.json(availabilityStatus);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// GET route to provide updated parking availability for the map markers
 router.get('/parking-availability', (req, res) => {
-  const parkingAvailability = {
-      "Car": [
-          { "coordinates": [81.213795, 8.6546], "available": true },
-          { "coordinates": [81.213795, 8.6546], "available": false }
-      ],
-      "Motorcycle": [
-          { "coordinates": [81.213795, 8.6546], "available": false },
-          { "coordinates": [81.213795, 8.6546], "available": true }
-      ]
-  };
-  res.json(parkingAvailability);
+  res.json(currentAvailability);
 });
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './keepers.css'; // Ensure you create and style the CSS file
 
 const KeepersPage = () => {
@@ -8,6 +8,30 @@ const KeepersPage = () => {
     booked: { cars: 0, bikes: 0 },
     remain: { cars: 3, bikes: 2 },
   });
+
+  const [availability, setAvailability] = useState({ cars: true, bikes: true });
+
+  useEffect(() => {
+    const checkAvailability = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/parking/check-availability', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ remain: vehicleData.remain })
+        });
+        const data = await response.json();
+        setAvailability({
+          cars: data.carsAvailable,
+          bikes: data.bikesAvailable,
+        });
+      } catch (error) {
+        console.error('Error checking availability:', error);
+      }
+    };
+
+    checkAvailability();
+  }, [vehicleData.remain]);
+
 
   const handleLogout = () => {
     // Handle logout functionality, redirect to login page
