@@ -1,9 +1,8 @@
-// routes/parking.js
 const express = require('express');
 const router = express.Router();
 const ParkingSpace = require('../models/ParkingSpace');
 
-// Get all parking spaces
+// GET all parking spaces
 router.get('/all', async (req, res) => {
   try {
     const parkingSpaces = await ParkingSpace.find({});
@@ -13,7 +12,7 @@ router.get('/all', async (req, res) => {
   }
 });
 
-// Get available parking spaces
+// GET available parking spaces
 router.get('/available', async (req, res) => {
   try {
     const availableSpaces = await ParkingSpace.find({ available: true });
@@ -56,17 +55,7 @@ router.put('/:id/availability', async (req, res) => {
   }
 });
 
-// GET all parking locations
-router.get('/', async (req, res) => {
-  try {
-    const parkingSpaces = await ParkingSpace.find();
-    res.json(parkingSpaces);
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// POST route to book a parking space
+// POST to book a parking space and update remaining counts
 router.post('/book', async (req, res) => {
   const { parkingSpaceId, type } = req.body; // type: 'car' or 'bike'
 
@@ -110,7 +99,7 @@ let currentAvailability = {
   ]
 };
 
-// POST route to check remaining spaces for availability and update in-memory data
+// POST to check remaining spaces for availability and update in-memory data
 router.post('/check-availability', async (req, res) => {
   const { remain } = req.body;
 

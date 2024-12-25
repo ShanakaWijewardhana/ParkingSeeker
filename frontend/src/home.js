@@ -133,7 +133,7 @@ const HomePage = () => {
       const isAvailable = spot.remainingSpaces > 0; // Green if available, red if not
 
       return new mapboxgl.Marker({
-        color: isAvailable ? 'red' : 'green',
+        color: isAvailable ? 'green' : 'red',
       })
       .setLngLat(spot.coordinates)
       .addTo(mapRef.current);
